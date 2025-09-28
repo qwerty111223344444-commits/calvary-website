@@ -2,17 +2,17 @@
 ---
 <header class="sticky top-0 z-50 bg-pine-900/80 backdrop-blur border-b border-white/10">
   <div class="flex items-center h-14">
-    <a href="/" class="site-logo-tight pl-2 pr-4 flex items-center">
-      <img src="/photos/IMG_2019.PNG" alt="Логотип команды" class="h-10 w-auto" />
+    <a href={import.meta.env.BASE_URL} class="site-logo-tight pl-2 pr-4 flex items-center">
+      <img src={`${import.meta.env.BASE_URL}photos/IMG_2019.PNG`} alt="Логотип команды" class="h-10 w-auto" />
     </a>
     <div class="container flex items-center justify-between">
       <div></div>
       <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="/#about" class="hover:text-mint-300">О команде</a>
-        <a href="/#rules" class="hover:text-mint-300">Правила</a>
-        <a href="/#events" class="hover:text-mint-300">Мероприятия</a>
-        <a href="/#contacts" class="hover:text-mint-300">Контакты</a>
-        <a href="/events" class="px-3 py-1.5 rounded-md bg-emerald-500 text-white hover:opacity-90">Все события</a>
+  <a href={`${import.meta.env.BASE_URL}#about`} class="hover:text-mint-300">О команде</a>
+  <a href={`${import.meta.env.BASE_URL}#rules`} class="hover:text-mint-300">Правила</a>
+  <a href={`${import.meta.env.BASE_URL}#events`} class="hover:text-mint-300">Мероприятия</a>
+  <a href={`${import.meta.env.BASE_URL}#contacts`} class="hover:text-mint-300">Контакты</a>
+  <a href={`${import.meta.env.BASE_URL}events`} class="px-3 py-1.5 rounded-md bg-emerald-500 text-white hover:opacity-90">Все события</a>
       </nav>
     </div>
   </div>

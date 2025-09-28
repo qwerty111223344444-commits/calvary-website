@@ -20,6 +20,9 @@ const resClass =
   event.result === 'L' ? 'badge-lose' : 'badge-draw';
 
 const year = new Date(event.date).getFullYear();
+// normalize gallery paths to respect base URL (so /photos/... becomes `${BASE_URL}photos/...`)
+const withBase = (p: string) => p && p.startsWith('http') ? p : `${import.meta.env.BASE_URL}${p.replace(/^\/+/, '')}`;
+const gallery = (event.gallery || []).map(withBase);
 ---
 <article
   class="bg-pine-800 rounded-xl p-4 md:p-5 shadow-soft flex flex-col gap-3"
@@ -43,24 +46,24 @@ const year = new Date(event.date).getFullYear();
     <span class="font-semibold">Место:</span> {event.place}
   </div>
 
-  {event.gallery && event.gallery.length ? (
+  {gallery && gallery.length ? (
     <>
       <!-- Mobile: show single large image. Use a trigger that proxies click to the real glightbox anchors
            (so an image doesn't appear twice in the same gallery when desktop anchors are also present). -->
       <div class="mt-2 sm:hidden">
-        <a href={event.gallery[0]} class="block rounded-md overflow-hidden" data-gallery-trigger={`gal-${event.id}`} aria-label="Фото 1">
+  <a href={gallery[0]} class="block rounded-md overflow-hidden" data-gallery-trigger={`gal-${event.id}`} aria-label="Фото 1">
           <div class="w-full h-56">
-            <img src={event.gallery[0]} alt="Фото мероприятия" class="w-full h-full object-cover" loading="lazy" />
+            <img src={gallery[0]} alt="Фото мероприятия" class="w-full h-full object-cover" loading="lazy" />
           </div>
         </a>
-        {event.gallery.length > 1 ? (
-          <div class="mt-2 text-sm text-white/70">Нажмите на фото, чтобы просмотреть все ({event.gallery.length})</div>
+        {gallery.length > 1 ? (
+          <div class="mt-2 text-sm text-white/70">Нажмите на фото, чтобы просмотреть все ({gallery.length})</div>
         ) : null}
       </div>
 
       <!-- Desktop: original 3-up preview -->
       <div class="hidden sm:grid grid-cols-3 gap-2 mt-2">
-        {event.gallery.slice(0, 3).map((src: string, idx: number) => (
+  {gallery.slice(0, 3).map((src: string, idx: number) => (
           <a
             href={src}
             class="glightbox block aspect-[16/10] rounded-md overflow-hidden"
@@ -73,7 +76,7 @@ const year = new Date(event.date).getFullYear();
       </div>
 
       {/* Hidden links for the rest of gallery */}
-      {event.gallery.slice(3).map((src: string, idx: number) => (
+      {gallery.slice(3).map((src: string, idx: number) => (
         <a href={src} class="glightbox hidden" data-gallery={`gal-${event.id}`} aria-label={`Фото ${idx+4}`}>
           <img src={src} alt="Фото мероприятия" loading="lazy" />
         </a>

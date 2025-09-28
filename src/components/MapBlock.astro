@@ -15,7 +15,7 @@ const src = `https://yandex.ru/map-widget/v1/?ll=${lon}%2C${lat}&z=14&pt=${lon},
     <p class="text-white/80 mb-4">{address}</p>
     <div class="rounded-xl overflow-hidden shadow-soft relative">
       <div class="absolute inset-0 pointer-events-none z-10 opacity-10">
-        <img src="/photos/logo_new.jpg" alt="" class="w-full h-full object-cover mix-blend-overlay" />
+  <img src={`${import.meta.env.BASE_URL}photos/logo_new.jpg`} alt="" class="w-full h-full object-cover mix-blend-overlay" />
       </div>
       <iframe
         src={src}
