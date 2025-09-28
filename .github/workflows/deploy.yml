@@ -1,7 +1,8 @@
-name: Deploy Astro site to GitHub Pages
+﻿name: Deploy Astro site to GitHub Pages
+
 on:
   push:
-    branches: [main]           # ваша рабочая ветка
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,16 +12,24 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: withastro/action@v4      # install → astro build → upload dist
+      - uses: actions/setup-node@v4
         with:
-          path: .                      # если проект в подпапке, укажите её
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - run: npx astro --version
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
