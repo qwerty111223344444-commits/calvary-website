@@ -1,0 +1,40 @@
+/* Стили для состояния ошибки загрузки изображения */
+.glightbox.error {
+  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.glightbox.error img {
+  width: 24px;
+  height: 24px;
+  opacity: 0.5;
+}
+
+/* Стили для прилипающего футера */
+#page-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+#content {
+  flex: 1;
+}
+
+
+/* Индикатор дополнительных фото */
+.gallery-more-indicator {
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+/* Header logo tight spacing */
+.site-logo-tight {
+  padding-left: 0.5rem;
+  padding-right: 1rem;
+}

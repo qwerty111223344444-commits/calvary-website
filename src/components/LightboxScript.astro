@@ -1,0 +1,25 @@
+---
+/* Инициализация GLightbox; подключён через CDN в Base.astro */
+---
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof GLightbox !== 'undefined') {
+      GLightbox({ selector: '.glightbox' });
+    }
+  });
+</script>
+
+<script is:inline>
+  // Proxy clicks from mobile single-image triggers to the first matching hidden glightbox anchor
+  document.addEventListener('click', (e) => {
+    const trg = (e.target && e.target.closest && e.target.closest('a[data-gallery-trigger]')) || null;
+    if (trg) {
+      const key = trg.getAttribute('data-gallery-trigger');
+      const target = document.querySelector(`a.glightbox[data-gallery='${key}']`);
+      if (target) {
+        e.preventDefault();
+        target.click();
+      }
+    }
+  });
+</script>

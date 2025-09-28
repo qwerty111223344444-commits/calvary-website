@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import EventsGrid from '../components/EventsGrid.astro';
+import LightboxScript from '../components/LightboxScript.astro';
+import events from '../data/events.json';
+
+const sorted = [...events].sort((a, b) => (a.date < b.date ? 1 : -1));
+const years = Array.from(new Set(sorted.map(e => new Date(e.date).getFullYear()))).sort((a,b)=>b-a);
+const types = Array.from(new Set(sorted.map(e => e.type)));
+---
+<Base title="Прошедшие мероприятия" description="Архив матчей и событий">
+  <Header />
+  <section class="py-10">
+    <div class="container">
+      <h1 class="font-['Russo_One'] text-2xl md:text-3xl mb-4">Прошедшие мероприятия</h1>
+
+      <!-- Фильтры (клиентская фильтрация) -->
+      <div class="bg-pine-800 rounded-xl p-4 md:p-5 shadow-soft mb-6">
+        <form id="filters" class="grid sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-sm text-white/70 mb-1">Год</label>
+            <select id="year" class="w-full bg-white/10 border border-white/10 rounded-md px-3 py-2">
+              <option value="">Все</option>
+              {years.map(y => <option value={String(y)}>{y}</option>)}
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm text-white/70 mb-1">Тип</label>
+            <select id="type" class="w-full bg-white/10 border border-white/10 rounded-md px-3 py-2">
+              <option value="">Все</option>
+              {types.map(t => <option value={t}>{t}</option>)}
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm text-white/70 mb-1">Поиск</label>
+            <input id="q" type="text" placeholder="например, beavers" class="w-full bg-white/10 border border-white/10 rounded-md px-3 py-2 text-black" />
+            <div class="text-sm mt-1"><span class="text-black">пример:</span> место, описание, соперник</div>
+          </div>
+        </form>
+      </div>
+
+      <div id="events-grid">
+        <EventsGrid events={sorted} />
+      </div>
+    </div>
+  </section>
+  <LightboxScript />
+
+  <script is:inline>
+    const form = document.getElementById('filters');
+    const yearSel = document.getElementById('year');
+    const typeSel = document.getElementById('type');
+    const qInput = document.getElementById('q');
+
+    function applyFilters() {
+      const year = yearSel.value;
+      const type = typeSel.value;
+      const q = qInput.value.trim().toLowerCase();
+
+      document.querySelectorAll('#events-grid article').forEach(card => {
+        const cyear = card.getAttribute('data-year');
+        const ctype = card.getAttribute('data-type');
+        const cop = (card.getAttribute('data-opponent') || '');
+        const cplace = (card.getAttribute('data-place') || '');
+        const creport = (card.getAttribute('data-report') || '');
+        let ok = true;
+        if (year && cyear !== year) ok = false;
+        if (type && ctype !== type) ok = false;
+        if (q && !(cop.includes(q) || cplace.includes(q) || creport.includes(q))) ok = false;
+        card.classList.toggle('hidden', !ok);
+      });
+    }
+
+    [yearSel, typeSel, qInput].forEach(el => el.addEventListener('input', applyFilters));
+  </script>
+</Base>

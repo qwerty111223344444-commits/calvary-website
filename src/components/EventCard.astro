@@ -1,0 +1,99 @@
+---
+interface Event {
+  id: string;
+  date: string;
+  type: 'match' | 'tournament' | string;
+  opponent: string;
+  result: 'W' | 'L' | 'D' | string;
+  score: string;
+  place: string;
+  coords?: [number, number];
+  tags?: string[];
+  gallery?: string[];
+  video?: string;
+  report?: string;
+}
+const { event } = Astro.props as { event: Event };
+
+const resClass =
+  event.result === 'W' ? 'badge-win' :
+  event.result === 'L' ? 'badge-lose' : 'badge-draw';
+
+const year = new Date(event.date).getFullYear();
+---
+<article
+  class="bg-pine-800 rounded-xl p-4 md:p-5 shadow-soft flex flex-col gap-3"
+  data-year={String(year)}
+  data-type={event.type}
+  data-opponent={event.opponent.toLowerCase()}
+  data-place={(event.place || '').toLowerCase()}
+  data-report={(event.report || '').toLowerCase()}
+>
+  <div class="flex items-center justify-between gap-3">
+    <div class="text-white/80 text-sm">{new Date(event.date).toLocaleDateString('ru-RU')}</div>
+    <div class={`badge ${resClass}`}>{event.result}</div>
+  </div>
+  <h3 class="text-xl font-semibold">
+    {event.opponent}
+  </h3>
+  <div class="text-white/80 text-sm">
+    {event.score ? (
+      <><span class="font-semibold">Счёт:</span> {event.score} • </>
+    ) : null}
+    <span class="font-semibold">Место:</span> {event.place}
+  </div>
+
+  {event.gallery && event.gallery.length ? (
+    <>
+      <!-- Mobile: show single large image. Use a trigger that proxies click to the real glightbox anchors
+           (so an image doesn't appear twice in the same gallery when desktop anchors are also present). -->
+      <div class="mt-2 sm:hidden">
+        <a href={event.gallery[0]} class="block rounded-md overflow-hidden" data-gallery-trigger={`gal-${event.id}`} aria-label="Фото 1">
+          <div class="w-full h-56">
+            <img src={event.gallery[0]} alt="Фото мероприятия" class="w-full h-full object-cover" loading="lazy" />
+          </div>
+        </a>
+        {event.gallery.length > 1 ? (
+          <div class="mt-2 text-sm text-white/70">Нажмите на фото, чтобы просмотреть все ({event.gallery.length})</div>
+        ) : null}
+      </div>
+
+      <!-- Desktop: original 3-up preview -->
+      <div class="hidden sm:grid grid-cols-3 gap-2 mt-2">
+        {event.gallery.slice(0, 3).map((src: string, idx: number) => (
+          <a
+            href={src}
+            class="glightbox block aspect-[16/10] rounded-md overflow-hidden"
+            data-gallery={`gal-${event.id}`}
+            aria-label={`Фото ${idx+1}`}
+          >
+            <img src={src} alt="Фото мероприятия" class="w-full h-full object-cover opacity-90 hover:opacity-100 transition" loading="lazy" />
+          </a>
+        ))}
+      </div>
+
+      {/* Hidden links for the rest of gallery */}
+      {event.gallery.slice(3).map((src: string, idx: number) => (
+        <a href={src} class="glightbox hidden" data-gallery={`gal-${event.id}`} aria-label={`Фото ${idx+4}`}>
+          <img src={src} alt="Фото мероприятия" loading="lazy" />
+        </a>
+      ))}
+    </>
+  ) : (
+    <div class="aspect-[16/10] rounded-md bg-white/5 grid place-items-center text-white/60">
+      [Фото появятся позже]
+    </div>
+  )}
+    </>
+
+
+  {event.video ? (
+    <div class="mt-3">
+      <a href={event.video} target="_blank" rel="noopener" class="text-mint-300 hover:underline">Видео</a>
+    </div>
+  ) : null}
+
+  {event.report ? (
+    <p class="text-white/80 text-sm mt-2">{event.report}</p>
+  ) : null}
+</article>

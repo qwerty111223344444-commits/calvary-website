@@ -1,0 +1,8 @@
+---
+import EventCard from './EventCard.astro';
+const { events = [], limit = 0 } = Astro.props as { events: any[]; limit?: number };
+const list = limit > 0 ? events.slice(0, limit) : events;
+---
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  {list.map((e) => <EventCard event={e} />)}
+</div>

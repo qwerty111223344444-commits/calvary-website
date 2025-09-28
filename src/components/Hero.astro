@@ -1,0 +1,23 @@
+---
+const { ctaHref = '#contacts' } = Astro.props;
+---
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-pine-900 via-pine-800 to-pine-900"></div>
+  <div class="container relative py-16 md:py-24">
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <div>
+        <h1 class="font-['Russo_One'] text-3xl md:text-5xl leading-tight">
+          Бейсбол - наша игра. <br class="hidden md:block" />
+          Девять игроков, один дух, одна победа.
+        </h1>
+        <div class="mt-6 flex items-center gap-3">
+          <a href={ctaHref} class="inline-flex items-center px-5 py-3 rounded-lg bg-emerald-500 text-white hover:opacity-90">Связаться</a>
+          <a href="/events" class="inline-flex items-center px-5 py-3 rounded-lg bg-white/10 text-white hover:bg-white/15">Прошедшие мероприятия</a>
+        </div>
+      </div>
+      <div class="aspect-[16/10] rounded-xl overflow-hidden shadow-soft">
+        <img src="/photos/slogan1.jpg" alt="Командное фото" class="w-full h-full object-cover" />
+      </div>
+    </div>
+  </div>
+</section>

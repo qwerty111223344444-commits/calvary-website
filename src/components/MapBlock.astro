@@ -1,0 +1,35 @@
+---
+interface Props {
+  title?: string;
+  address?: string;
+  hint?: string;
+  lat?: number;
+  lon?: number;
+}
+const { title = 'Где мы находимся', address = 'Тверская область, г. Конаково', hint = 'Построить маршрут', lat = 56.886361, lon = 36.014872 } = Astro.props as Props;
+const src = `https://yandex.ru/map-widget/v1/?ll=${lon}%2C${lat}&z=14&pt=${lon},${lat},pm2rdm&l=sat`;
+---
+<section id="contacts" class="py-14">
+  <div class="container">
+    <h2 class="font-['Russo_One'] text-2xl md:text-3xl mb-4">{title}</h2>
+    <p class="text-white/80 mb-4">{address}</p>
+    <div class="rounded-xl overflow-hidden shadow-soft relative">
+      <div class="absolute inset-0 pointer-events-none z-10 opacity-10">
+        <img src="/photos/logo_new.jpg" alt="" class="w-full h-full object-cover mix-blend-overlay" />
+      </div>
+      <iframe
+        src={src}
+        width="100%"
+        height="360"
+        style="border:0;"
+        loading="lazy"
+        title="Яндекс.Карта"
+      ></iframe>
+    </div>
+    <div class="mt-4">
+      <a class="inline-flex items-center px-4 py-2 rounded-lg bg-emerald-500 text-white hover:bg-emerald-600 transition-colors" href={`https://yandex.ru/maps/?rtext=~${lat},${lon}`} target="_blank" rel="noopener">
+        {hint}
+      </a>
+    </div>
+  </div>
+</section>

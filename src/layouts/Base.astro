@@ -1,0 +1,36 @@
+---
+import Footer from '../components/Footer.astro';
+const { title = 'Бейсбольная команда', description = 'Официальный сайт команды', ogImage = '/favicon.svg' } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Russo+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/styles/globals.css">
+
+    <!-- GLightbox для галерей (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  </head>
+  <body class="font-[Manrope]">
+    <div id="page-wrapper">
+      <div id="content">
+        <slot />
+      </div>
+      <Footer />
+    </div>
+  </body>
+</html>
