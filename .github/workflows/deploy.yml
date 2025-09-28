@@ -1,26 +1,54 @@
 name: Deploy Astro site to GitHub Pages
 
 on:
+  # Запускается при пуше в ветку `main`
   push:
     branches: [main]
+  # Позволяет запускать этот workflow вручную со страницы Actions
   workflow_dispatch:
 
+# Устанавливаем права для GITHUB_TOKEN, чтобы разрешить деплой на GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Разрешаем только один одновременный деплой, отменяя предыдущие запуски
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: withastro/action@v4          # install → build → upload «dist»
-        # можно добавить
-        # with:
-        #   node-version: 22
-        #   package-manager: pnpm@8
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      # Устанавливаем Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" # Рекомендуется использовать LTS-версию Node.js
+          cache: 'npm' # или 'pnpm', 'yarn'
+
+      # Устанавливаем зависимости
+      - name: Install dependencies
+        run: npm install
+
+      # Собираем сайт
+      - name: Build
+        run: npm run build
+
+      # Загружаем артефакт для деплоя
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Загружаем содержимое папки dist, куда Astro собирает сайт
+          path: ./dist
+
   deploy:
+    # Деплой будет запущен только после успешной сборки
     needs: build
     runs-on: ubuntu-latest
     environment:
